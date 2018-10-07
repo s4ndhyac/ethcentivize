@@ -117,14 +117,24 @@ contract JiraContract is usingOraclize, PullPayment, Chainlinked {
     requestId = chainlinkRequest(run, LINK(1));
   }
 
+  /**
+   * @dev Getter function for the stage of an issue
+   */
   function creditTransfer() public payable {
     asyncTransfer(dest, amount);
   }
 
-  function checkReward(address assignee) public view returns(uint256) {
-    return payments(assignee);
+  /**
+   * @dev Getter function for payments made to an assignee
+   * @param _assignee Address of the assignee to check
+   */
+  function checkReward(address _assignee) public view returns(uint256) {
+    return payments(_assignee);
   }
 
+   /**
+   * @dev Function for assignees to withdraw their rewards
+   */
   function withdrawReward() public {
     withdrawPayments();
   }
