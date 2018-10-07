@@ -31,14 +31,14 @@
     "absolutePath": "chainlink/solidity/contracts/ENSResolver.sol",
     "exportedSymbols": {
       "ENSResolver": [
-        1877
+        1897
       ]
     },
-    "id": 1878,
+    "id": 1898,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1869,
+        "id": 1889,
         "literals": [
           "solidity",
           "^",
@@ -54,9 +54,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1877,
+        "id": 1897,
         "linearizedBaseContracts": [
-          1877
+          1897
         ],
         "name": "ENSResolver",
         "nodeType": "ContractDefinition",
@@ -64,7 +64,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1876,
+            "id": 1896,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -72,15 +72,15 @@
             "name": "addr",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1872,
+              "id": 1892,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1871,
+                  "id": 1891,
                   "name": "node",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1876,
+                  "scope": 1896,
                   "src": "65:12:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -89,7 +89,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 1870,
+                    "id": 1890,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "65:7:8",
@@ -106,15 +106,15 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 1875,
+              "id": 1895,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1874,
+                  "id": 1894,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1876,
+                  "scope": 1896,
                   "src": "100:7:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -123,7 +123,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1873,
+                    "id": 1893,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "100:7:8",
@@ -138,14 +138,14 @@
               ],
               "src": "99:9:8"
             },
-            "scope": 1877,
+            "scope": 1897,
             "src": "51:58:8",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1878,
+        "scope": 1898,
         "src": "26:85:8"
       }
     ],
@@ -155,14 +155,14 @@
     "absolutePath": "chainlink/solidity/contracts/ENSResolver.sol",
     "exportedSymbols": {
       "ENSResolver": [
-        1877
+        1897
       ]
     },
-    "id": 1878,
+    "id": 1898,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1869,
+        "id": 1889,
         "literals": [
           "solidity",
           "^",
@@ -178,9 +178,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 1877,
+        "id": 1897,
         "linearizedBaseContracts": [
-          1877
+          1897
         ],
         "name": "ENSResolver",
         "nodeType": "ContractDefinition",
@@ -188,7 +188,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 1876,
+            "id": 1896,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -196,15 +196,15 @@
             "name": "addr",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1872,
+              "id": 1892,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1871,
+                  "id": 1891,
                   "name": "node",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1876,
+                  "scope": 1896,
                   "src": "65:12:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -213,7 +213,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 1870,
+                    "id": 1890,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "65:7:8",
@@ -230,15 +230,15 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 1875,
+              "id": 1895,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1874,
+                  "id": 1894,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1876,
+                  "scope": 1896,
                   "src": "100:7:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -247,7 +247,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1873,
+                    "id": 1893,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "100:7:8",
@@ -262,14 +262,14 @@
               ],
               "src": "99:9:8"
             },
-            "scope": 1877,
+            "scope": 1897,
             "src": "51:58:8",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1878,
+        "scope": 1898,
         "src": "26:85:8"
       }
     ],
@@ -281,5 +281,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-10-07T07:57:27.578Z"
+  "updatedAt": "2018-10-07T14:59:12.124Z"
 }

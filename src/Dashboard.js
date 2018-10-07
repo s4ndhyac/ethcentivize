@@ -57,15 +57,16 @@ class Dashboard extends Component {
     var jiraContractInstance
     this.jiraContract.deployed().then((instance) => {
       jiraContractInstance = instance
-      jiraContractInstance.getIssue(issueId, { from: this.state.account }).then((result) => {
-        console.log(result)
-        var rewardInWei = result[3].valueOf()
-        jiraContractInstance.creditTransfer(this.state.account, rewardInWei, { from: this.state.account[1], value: rewardInWei }).then((value) => {
-          console.log(value.valueOf())
-          document.getElementById("repositoryOwner").innerHTML = ""
-          document.getElementById("repositoryName").innerHTML = ""
-          document.getElementById("repositoryIssueId").innerHTML = ""
-          document.getElementById("message").innerHTML = "Success"
+      jiraContractInstance.closeIssue(issueId, { from: this.state.account }).then(() => {
+        jiraContractInstance.getIssue(issueId, { from: this.state.account }).then((result) => {
+          var rewardInWei = result[3].valueOf()
+          jiraContractInstance.creditTransfer(this.state.account, rewardInWei, { from: result[5].valueOf(), value: rewardInWei }).then((value) => {
+            console.log(value.valueOf())
+            document.getElementById("repositoryOwner").innerHTML = ""
+            document.getElementById("repositoryName").innerHTML = ""
+            document.getElementById("repositoryIssueId").innerHTML = ""
+            document.getElementById("message").innerHTML = "Success"
+          })
         })
       })
     })

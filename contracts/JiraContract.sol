@@ -52,12 +52,16 @@ contract JiraContract is Chainlinked, PullPayment{
     return numIssues;
   }
 
-  function getIssue(uint32 issueId) public view returns(uint, address, string, uint256, uint) {
-    return (uint(issues[issueId].issueType), issues[issueId].assignee, issues[issueId].desc, issues[issueId].rewardAmt, uint(issues[issueId].issueStage));
+  function getIssue(uint32 issueId) public view returns(uint, address, string, uint256, uint, address) {
+    return (uint(issues[issueId].issueType), issues[issueId].assignee, issues[issueId].desc, issues[issueId].rewardAmt, uint(issues[issueId].issueStage), issues[issueId].assigner);
   }
 
   function getIssueDevDetails(uint32 issueId) public view returns(string, string, string) {
     return (issues[issueId].repositoryOwner, issues[issueId].repositoryName, issues[issueId].repoIssueId);
+  }
+
+  function closeIssue(uint32 issueId) public {
+    issues[issueId].issueStage = IssueStage.Closed;
   }
 
   function strConcat(string _a, string _b, string _c, string _d, string _e) internal returns (string){

@@ -34,14 +34,14 @@
     "absolutePath": "link_token/contracts/token/ERC677Receiver.sol",
     "exportedSymbols": {
       "ERC677Receiver": [
-        2598
+        2618
       ]
     },
-    "id": 2599,
+    "id": 2619,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2588,
+        "id": 2608,
         "literals": [
           "solidity",
           "^",
@@ -57,9 +57,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 2598,
+        "id": 2618,
         "linearizedBaseContracts": [
-          2598
+          2618
         ],
         "name": "ERC677Receiver",
         "nodeType": "ContractDefinition",
@@ -67,7 +67,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2597,
+            "id": 2617,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -75,15 +75,15 @@
             "name": "onTokenTransfer",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2595,
+              "id": 2615,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2590,
+                  "id": 2610,
                   "name": "_sender",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2597,
+                  "scope": 2617,
                   "src": "79:15:14",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -92,7 +92,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2589,
+                    "id": 2609,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "79:7:14",
@@ -106,10 +106,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2592,
+                  "id": 2612,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2597,
+                  "scope": 2617,
                   "src": "96:11:14",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -118,7 +118,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2591,
+                    "id": 2611,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "96:4:14",
@@ -132,10 +132,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2594,
+                  "id": 2614,
                   "name": "_data",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2597,
+                  "scope": 2617,
                   "src": "109:11:14",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -144,7 +144,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 2593,
+                    "id": 2613,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "109:5:14",
@@ -161,19 +161,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 2596,
+              "id": 2616,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "121:0:14"
             },
-            "scope": 2598,
+            "scope": 2618,
             "src": "54:68:14",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 2599,
+        "scope": 2619,
         "src": "26:98:14"
       }
     ],
@@ -183,14 +183,14 @@
     "absolutePath": "link_token/contracts/token/ERC677Receiver.sol",
     "exportedSymbols": {
       "ERC677Receiver": [
-        2598
+        2618
       ]
     },
-    "id": 2599,
+    "id": 2619,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2588,
+        "id": 2608,
         "literals": [
           "solidity",
           "^",
@@ -206,9 +206,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 2598,
+        "id": 2618,
         "linearizedBaseContracts": [
-          2598
+          2618
         ],
         "name": "ERC677Receiver",
         "nodeType": "ContractDefinition",
@@ -216,7 +216,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 2597,
+            "id": 2617,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -224,15 +224,15 @@
             "name": "onTokenTransfer",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2595,
+              "id": 2615,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2590,
+                  "id": 2610,
                   "name": "_sender",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2597,
+                  "scope": 2617,
                   "src": "79:15:14",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -241,7 +241,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2589,
+                    "id": 2609,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "79:7:14",
@@ -255,10 +255,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2592,
+                  "id": 2612,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2597,
+                  "scope": 2617,
                   "src": "96:11:14",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -267,7 +267,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2591,
+                    "id": 2611,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "96:4:14",
@@ -281,10 +281,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2594,
+                  "id": 2614,
                   "name": "_data",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2597,
+                  "scope": 2617,
                   "src": "109:11:14",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -293,7 +293,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 2593,
+                    "id": 2613,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "109:5:14",
@@ -310,19 +310,19 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 2596,
+              "id": 2616,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "121:0:14"
             },
-            "scope": 2598,
+            "scope": 2618,
             "src": "54:68:14",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 2599,
+        "scope": 2619,
         "src": "26:98:14"
       }
     ],
@@ -334,5 +334,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-10-07T07:57:27.578Z"
+  "updatedAt": "2018-10-07T14:59:12.125Z"
 }
