@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.1.3",
+    "chainlink": "github:smartcontractkit/chainlink",
     "dotenv": "^2.0.0",
     "openzeppelin-solidity": "1.12.0",
     "react": "^15.6.2",
