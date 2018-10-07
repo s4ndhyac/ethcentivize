@@ -2,20 +2,13 @@ pragma solidity ^0.4.24;
 
 import "../node_modules/openzeppelin-solidity/contracts/payment/PullPayment.sol";
 import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
-import "chainlink/solidity/contracts/Chainlinked.sol";
 
-contract JiraContract is usingOraclize, PullPayment, Chainlinked {
+contract JiraContract is usingOraclize, PullPayment {
 
   address private owner;
 
   constructor() public {
     owner = msg.sender;
-  }
-
-  enum IssueStage {
-    Open,
-    InProgress,
-    Closed
   }
 
   enum IssueType {
@@ -31,10 +24,7 @@ contract JiraContract is usingOraclize, PullPayment, Chainlinked {
     address assignee;
     string desc;
     uint256 rewardAmt;
-    string repositoryOwner;
-    string repositoryName;
-    IssueStage issueStage;
-    string repoIssueId;
+    string solution;
   }
 
   mapping (uint32 => Issue) issues;
@@ -43,7 +33,8 @@ contract JiraContract is usingOraclize, PullPayment, Chainlinked {
   uint32 numIssues;
 
   event CreateIssue(uint32 issueId, address assignee);
-  event CreateRepoIssue(uint32 IssueId, address assignee);
+  event CreateRepoIssue(uint32 IssueId, address assigner);
+  event AcceptRepoIssue(uint32 IssueId, address assignee);
 
   /**
    * @dev Create a new issue
@@ -51,11 +42,9 @@ contract JiraContract is usingOraclize, PullPayment, Chainlinked {
    * @param _assignee The address of the person assigned the job
    * @param _desc The description of the job
    * @param _rewardAmt The reward from completing the job, in Wei
-   * @param _repositoryOwner The repo owner's github id
-   * @param _repositoryName The name of the github repo
    */
-  function createIssue(IssueType _issueType, address _assignee, string _desc, uint256 _rewardAmt, string _repositoryOwner, string _repositoryName) public returns(uint32) {
-    issues[numIssues] = Issue(_numIssues, _issueType, msg.sender, _assignee, _desc, _rewardAmt, _repositoryOwner, _repositoryName, IssueStage.Open, "");
+  function createIssue(IssueType _issueType, address _assignee, string _desc, uint256 _rewardAmt) public returns(uint32) {
+    issues[numIssues] = Issue(_numIssues, _issueType, msg.sender, _assignee, _desc, _rewardAmt, "");
     assigneeJobs[_assignee][devNumJobs] = numIssues;
     devNumJobs[_assignee]++;
     emit CreateIssue(numIssues, _assignee);
@@ -74,8 +63,8 @@ contract JiraContract is usingOraclize, PullPayment, Chainlinked {
    * @dev Getter function for the metadata of an issue
    * @param _issueId The id number of the issue of interest
    */
-  function getIssue(uint32 _issueId) public view returns(uint, address, string, uint256, string, string, uint, string) {
-    return (uint(issues[_issueId].issueType), issues[_issueId].assignee, issues[_issueId].desc, issues[_issueId].rewardAmt, issues[_issueId].repositoryOwner, issues[_issueId].repositoryName, uint(issues[_issueId].issueStage), issues[_issueId].repoIssueId);
+  function getIssue(uint32 _issueId) public view returns(uint, address, address, string, uint256, string) {
+    return (uint(issues[_issueId].issueType), issues[_issueId].assigner, issues[_issueId].assignee, issues[_issueId].desc, issues[_issueId].rewardAmt, uint(issues[_issueId].solution));
   }
 
   /**
@@ -91,37 +80,30 @@ contract JiraContract is usingOraclize, PullPayment, Chainlinked {
   }
 
   /**
-   * @dev TODO
-   * @dev Creates the pull request for the repo
+   * @dev Solution for the issue
    * @param _issueId The id number of the issue to link github actions to
-   * @param _repositoryOwner The owner of the github repository
-   * @param _repositoryName The name of the github repository
+   * @param _solution The http location of the solution
    */
-  function createRepoIssue(uint32 _issueId, string _repositoryOwner, string _repositoryName) public payable returns(string) {
+  function createRepoIssue(uint32 _issueId, string _solution) public payable {
     require(issues[_issueId].assignee == msg.sender);
-    emit CreateRepoIssue(_issueId);
-  }
-
-  // UNSTABLE
-  /**
-   * @dev TODO
-   * @dev Getter function for the stage of an issue
-   * @param _repoIssueId Id number of the repo/pull request number
-   */
-  function getIssueStage(string _repoIssueId) public payable returns(uint) {
-    ChainlinkLib.Run memory run = newRun(jobId, this, "requestedDataCallback(string)");
-    run.add("url", "https://api.github.com/" + _repositoryOwner + "/" + _repositoryName + "/pull/" + _repoIssueId);
-    string[] memory path = new string[](1);
-    path[0] = "state"; // "open" or whatever
-    run.addStringArray("copyPath", path);
-    requestId = chainlinkRequest(run, LINK(1));
+    emit CreateRepoIssue(_issueId, issues[_issueId].assigner);
+    issues[_issueId].solution = _solution;
   }
 
   /**
-   * @dev Getter function for the stage of an issue
+   * @dev Accept function for the stage of an issue
+   * @param _issueId Id number of the issue
    */
-  function creditTransfer() public payable {
-    asyncTransfer(dest, amount);
+  function acceptRepoIssue(uint32 _issueId) public payable {
+    emit AcceptRepoIssue(_issueId, issues[_issueId].assignee);
+    creditTransfer(issues[_issueId].assignee, issues[_issueId].amount);
+  }
+
+  /**
+   * @dev Payment function
+   */
+  function creditTransfer(address _payee, uint32 _amount) public payable {
+    asyncTransfer(_payee, _amount);
   }
 
   /**
