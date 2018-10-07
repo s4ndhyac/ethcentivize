@@ -20,11 +20,9 @@ class Browse extends Component {
     this.state = {
       web3: null,
       account: null,
-      issues: [],
-      isStopped: false
+      issues: []
     }
     this.jiraContract = contract(JiraContract)
-    //this.submitSolution = this.submitSolution.bind(this)
   }
 
   componentWillMount() {
@@ -73,54 +71,43 @@ class Browse extends Component {
     })
   }
 
-  // submitSolution(bountyId) {
-  //   var bountyContractInstance;
-  //   this.bountyContract.deployed().then((instance) => {
-  //     bountyContractInstance = instance;
-  //     var solutionKey = "solution_" + bountyId
-  //     var answer = document.getElementById(solutionKey).value;
-  //     this.refs.solutionRef.value = ""
-  //     return bountyContractInstance.createSolution(bountyId, answer, { from: this.state.account }).then((value) => {
-  //       console.log(value.valueOf())
-  //       var messageKey = "message_" + bountyId
-  //       document.getElementById(messageKey).innerHTML = "Success"
-  //       document.getElementById(solutionKey).value = ""
-  //     }).catch((error) => {
-  //       console.log(error)
-  //     })
-  //   })
-  // }
+  startWork(issueId) {
+    var jiraContractInstance;
+    this.jiraContract.deployed().then((instance) => {
+      jiraContractInstance = instance;
+      return jiraContractInstance.createRepoIssue(issueId, { from: this.state.account }).then((value) => {
+        console.log(value.valueOf())
+        var messageKey = "message_" + issueId
+        document.getElementById(messageKey).innerHTML = "Success"
+      }).catch((error) => {
+        console.log(error)
+      })
+    })
+  }
 
 
-  // createCard(bounty, index) {
-  //   var bountyStage = bounty[3].valueOf() == 0 ? "Open" : bounty[3].valueOf() == 1 ? "Closed" : "Invalid State"
-  //   return (
-  //     <Card key={"bountyId_" + index}>
-  //       <CardHeader tag="h3">{bountyStage}</CardHeader>
-  //       <CardBody>
-  //         <CardTitle tag="h4">Problem Statement</CardTitle>
-  //         <CardText className="lead">{bounty[1]}</CardText>
-  //         <hr />
-  //         {bounty[3].valueOf() == 0 ? (
-  //           <div>
-  //             <FormGroup row>
-  //               <Col sm={1}>
-  //                 <Label for="bountySolution" size="lg">Solution</Label>
-  //               </Col>
-  //               <Col sm={8}>
-  //                 <Input type="solution" ref="solutionRef" name="solution" id={"solution_" + index} placeholder="Enter Solution" bsSize="lg" />
-  //               </Col>
-  //             </FormGroup>
-  //             <Button onClick={() => this.submitSolution(index)} disabled={this.state.isStopped}>Submit Solution</Button>
-  //           </div>
-  //         ) : null}
-  //       </CardBody>
-  //       <CardFooter tag="h3">{"Reward: " + this.state.web3.fromWei(bounty[2].valueOf(), "ether") + " ETH"}</CardFooter>
-  //       <p key={"p_" + index} className="p" id={"message_" + index}></p>
-  //       <br />
-  //     </Card>
-  //   )
-  // }
+  createCard(issue, index) {
+    console.log(issue);
+    var issueType = issue[0].valueOf() == 0 ? "Feature" : issue[0].valueOf() == 1 ? "Bug" : "Support"
+    var issueStage = issue[4].valueOf() == 0 ? "Open" : "Closed"
+    return (
+      <Card key={"issueId_" + index}>
+        <CardHeader tag="h3">{issueType + " || " + issueStage}</CardHeader>
+        <CardBody>
+          <CardTitle tag="h4">Issue Description</CardTitle>
+          <CardText className="lead">{issue[2]}</CardText>
+          <hr />
+          {issue[1].valueOf() == this.state.account && issue[4].valueOf() == 0 ? (
+            <div>
+              <Button onClick={() => this.startWork(index)}>Start Work</Button>
+            </div>
+          ) : null}
+        </CardBody>
+        <CardFooter tag="h3">{"Reward: " + this.state.web3.fromWei(issue[3].valueOf(), "ether") + " ETH"}</CardFooter>
+        {/* <p key={"p_" + index} className="p" id={"message_" + index}></p> */}
+      </Card>
+    )
+  }
 
 
   render() {
@@ -129,8 +116,8 @@ class Browse extends Component {
         <div className="navbar-wrapper">
           <Navbar expand="md" className="navbar-fixed-top">
             <NavbarBrand href="./" className="mr-xl-5 h-25" id="navbar-header">ETHcentivize</NavbarBrand>
-            <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
+            <NavbarToggler />
+            <Collapse navbar>
               <Nav navbar>
                 <NavItem className="mr-xl-5 h-25">
                   <NavLink><Link to="/create">Create</Link></NavLink>
@@ -147,7 +134,7 @@ class Browse extends Component {
         </div>
         <h1 className="m-md-5">Browse</h1>
         <div>
-          {/* {this.state.bounties.map((bounty, index) => { return this.createCard(bounty, index) })} */}
+          {this.state.issues.map((issue, index) => { return this.createCard(issue, index) })}
         </div>
       </div >
     );

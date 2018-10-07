@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import "../node_modules/openzeppelin-solidity/contracts/payment/PullPayment.sol";
 import "chainlink/solidity/contracts/Chainlinked.sol";
 
-contract JiraContract is Chainlinked, PullPayment {
+contract JiraContract is Chainlinked, PullPayment{ 
 
   address private owner;
 
@@ -15,7 +15,6 @@ contract JiraContract is Chainlinked, PullPayment {
 
   enum IssueStage {
     Open,
-    InProgress,
     Closed
   }
 
@@ -41,6 +40,8 @@ contract JiraContract is Chainlinked, PullPayment {
   mapping (uint32 => Issue) issues;
   uint32 numIssues;
 
+  mapping(bytes32 => uint32) public receipts;
+
   function createIssue(IssueType issueType, address assignee, string desc, uint256 rewardAmt, string repositoryOwner, string repositoryName) public returns(uint32) {
     issues[numIssues] = Issue(numIssues, issueType, msg.sender, assignee, desc, rewardAmt, repositoryOwner, repositoryName, IssueStage.Open, "");
     numIssues++;
@@ -51,8 +52,12 @@ contract JiraContract is Chainlinked, PullPayment {
     return numIssues;
   }
 
-  function getIssue(uint32 issueId) public view returns(uint, address, string, uint256, string, string, uint, string) {
-    return (uint(issues[issueId].issueType), issues[issueId].assignee, issues[issueId].desc, issues[issueId].rewardAmt, issues[issueId].repositoryOwner, issues[issueId].repositoryName, uint(issues[issueId].issueStage), issues[issueId].repoIssueId);
+  function getIssue(uint32 issueId) public view returns(uint, address, string, uint256, uint) {
+    return (uint(issues[issueId].issueType), issues[issueId].assignee, issues[issueId].desc, issues[issueId].rewardAmt, uint(issues[issueId].issueStage));
+  }
+
+  function getIssueDevDetails(uint32 issueId) public view returns(string, string, string) {
+    return (issues[issueId].repositoryOwner, issues[issueId].repositoryName, issues[issueId].repoIssueId);
   }
 
   function strConcat(string _a, string _b, string _c, string _d, string _e) internal returns (string){
@@ -70,51 +75,78 @@ contract JiraContract is Chainlinked, PullPayment {
     for (i = 0; i < _bd.length; i++) babcde[k++] = _bd[i];
     for (i = 0; i < _be.length; i++) babcde[k++] = _be[i];
     return string(babcde);
-}
+  }
 
   function strConcat(string _a, string _b, string _c, string _d) internal returns (string) {
-      return strConcat(_a, _b, _c, _d, "");
+    return strConcat(_a, _b, _c, _d, "");
   }
 
   function strConcat(string _a, string _b, string _c) internal returns (string) {
-      return strConcat(_a, _b, _c, "", "");
+    return strConcat(_a, _b, _c, "", "");
   }
 
   function strConcat(string _a, string _b) internal returns (string) {
-      return strConcat(_a, _b, "", "", "");
+    return strConcat(_a, _b, "", "", "");
   }
 
-  function createRepoIssue(string repositoryName, string repository) public payable {
-    bytes32 constant jobId = bytes32("cde8428b99b343d294d395853af86441");
-    ChainlinkLib.Run memory run = newRun(jobId, this, "createRepoIssueCallback(bytes32, string)");
-    run.add("url", strConcat("https://api.github.com/repos",repositoryOwner,repositoryName,"issues"));
+  function bytes32ToString(bytes32 x) public view returns (string) {
+    bytes memory bytesString = new bytes(32);
+    uint charCount = 0;
+    for (uint j = 0; j < 32; j++) {
+      byte char = byte(bytes32(uint(x) * 2 ** (8 * j)));
+      if (char != 0) {
+        bytesString[charCount] = char;
+        charCount++;
+      }
+    }
+    bytes memory bytesStringTrimmed = new bytes(charCount);
+    for (j = 0; j < charCount; j++) {
+      bytesStringTrimmed[j] = bytesString[j];
+    }
+    return string(bytesStringTrimmed);
+  }
 
+  function createRepoIssue(uint32 issueId) public payable returns (bytes32) {
+    bytes32 jobId = bytes32("cde8428b99b343d294d395853af86441");
+    ChainlinkLib.Run memory run = newRun(jobId, this, "createRepoIssueCallback(bytes32,bytes32)");
+    run.add("url", strConcat("https://api.github.com/repos/",issues[issueId].repositoryOwner,"/",issues[issueId].repositoryName,"/issues"));  
     string[] memory path = new string[](1);
-    path[0] = _currency;
+    path[0] = "number";
     run.addStringArray("path", path);
-    requestId = chainlinkRequest(run, LINK(1));
+    string memory issueType = uint(issues[issueId].issueType) == 0 ? "enhancement" : (uint(issues[issueId].issueType) == 1) ? "bug" : "question"; 
+    run.add("title", issueType);
+    run.add("body", issues[issueId].desc);
+    string[] memory assignees = new string[](1);
+    assignees[0] = issues[issueId].repositoryOwner;
+    run.addStringArray("assignees", assignees);
+    string[] memory labels = new string[](1);
+    labels[0] = issueType;
+    run.addStringArray("labels", labels);
+    run.add("Content-Type","application/json");
+    run.add("Authorization","Basic czRuZGh5YWM6cmFmYTIzNDky");
+    chainlinkRequest(run, LINK(1));
   }
 
-  function createRepoIssueCallback(bytes32 _requestId, string repoIssueId) public checkChainlinkFulfillment(_requestId) {
-
+  function createRepoIssueCallback(bytes32 _requestId, bytes32 repoIssueId) public checkChainlinkFulfillment(_requestId) {
+    issues[receipts[_requestId]].repoIssueId = bytes32ToString(repoIssueId);
   }
 
-  function getIssueStage(string repoIssueId) public payable returns(uint) {
-    bytes32 constant jobId = bytes32("8572b8d42abe4ebfa059e8f5b1500b9f");
-    ChainlinkLib.Run memory run = newRun(jobId, this, "requestedDataCallback(bytes32, string)");
-    run.add("url", strConcat("https://api.github.com/repos",repositoryOwner,repositoryName,"pulls",repoIssueId));
 
+  function getIssueStage(string repositoryOwner, string repositoryName, string repoIssueId) public payable returns(uint) {
+    bytes32 jobId = bytes32("8572b8d42abe4ebfa059e8f5b1500b9f");
+    ChainlinkLib.Run memory run = newRun(jobId, this, "requestedDataCallback(bytes32,bytes32)");
+    run.add("url", strConcat(strConcat("https://api.github.com/repos/",repositoryOwner),"/",repositoryName,"/pulls/",repoIssueId));
     string[] memory path = new string[](1);
-    path[0] = _currency;
+    path[0] = "message";
     run.addStringArray("path", path);
-    requestId = chainlinkRequest(run, LINK(1));
+    chainlinkRequest(run, LINK(1));
   }
 
-  function requestedDataCallback(bytes32 _requestId, string issueStage) public checkChainlinkFulfillment(_requestId) {
+  function requestedDataCallback(bytes32 _requestId, bytes32 issueStage) public checkChainlinkFulfillment(_requestId) {
     
   }
 
-  function creditTransfer() public payable {
+  function creditTransfer(address dest, uint256 amount) public payable {
     asyncTransfer(dest, amount);
   }
 

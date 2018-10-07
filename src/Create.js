@@ -17,8 +17,7 @@ class Create extends Component {
     super(props)
     this.state = {
       web3: null,
-      account: null,
-      isStopped: false
+      account: null
     }
     this.jiraContract = contract(JiraContract)
     this.createIssue = this.createIssue.bind(this)
@@ -51,18 +50,27 @@ class Create extends Component {
   }
 
   createIssue() {
-    var bountyDesc = document.getElementById("bountyProblem").value;
-    var bountyReward = document.getElementById("bountyReward").value;
-    var bountyRewardInWei = this.state.web3.toWei(bountyReward, "ether")
+    console.log(document.getElementById("issueType"))
+    var issueType = document.getElementById("issueType").value == "Feature" ? 0 : document.getElementById("issueType").value == "Bug" ? 1 : 2;
+    var issueDesc = document.getElementById("issue").value;
+    var issueReward = document.getElementById("issueReward").value;
+    var assignee = document.getElementById("assigneeAddress").value;
+    var repoOwner = document.getElementById("repoOwner").value;
+    var repoName = document.getElementById("repositoryName").value;
+    var issueRewardInWei = this.state.web3.toWei(issueReward, "ether")
     var jiraContractInstance;
     this.jiraContract.deployed().then((instance) => {
       jiraContractInstance = instance;
-      return jiraContractInstance.createBounty(bountyDesc, bountyRewardInWei, { from: this.state.account })
+      return jiraContractInstance.createIssue(issueType, assignee, issueDesc, issueRewardInWei, repoOwner, repoName, { from: this.state.account })
     }).then((value) => {
       console.log(value.valueOf());
       document.getElementById("message").innerHTML = "Success"
-      document.getElementById("bountyProblem").value = ""
-      document.getElementById("bountyReward").value = ""
+      document.getElementById("issue").value = ""
+      document.getElementById("issueReward").value = ""
+      document.getElementById("issueType").value = ""
+      document.getElementById("assigneeAddress").value = ""
+      document.getElementById("repoOwner").value = ""
+      document.getElementById("repositoryName").value = ""
     }).catch((error) => {
       console.log(error)
     })
@@ -75,8 +83,8 @@ class Create extends Component {
         <div className="navbar-wrapper">
           <Navbar expand="md" className="navbar-fixed-top">
             <NavbarBrand href="./" className="mr-xl-5 h-25" id="navbar-header">ETHcentivize</NavbarBrand>
-            <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
+            <NavbarToggler />
+            <Collapse navbar>
               <Nav navbar>
                 <NavItem className="mr-xl-5 h-25">
                   <NavLink><Link to="/create">Create</Link></NavLink>
@@ -96,21 +104,57 @@ class Create extends Component {
           <Form>
             <FormGroup row>
               <Col sm={1}>
-                <Label for="bountyProblem" sm={1} size="lg">Problem Description</Label>
+                <Label for="issue" sm={1} size="lg">Issue Type</Label>
               </Col>
               <Col sm={8}>
-                <Input type="textarea" name="text" id="bountyProblem" placeholder="Enter Problem Statement for Bounty Program" bsSize="lg" />
+                <Input type="select" size="lg" name="select" id="issueType">
+                  <option>Feature</option>
+                  <option>Bug</option>
+                  <option>Support</option>
+                </Input>
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col sm={1}>
-                <Label for="bountyReward" sm={1} size="lg">Reward</Label>
+                <Label for="issue" sm={1} size="lg">Issue</Label>
               </Col>
               <Col sm={8}>
-                <Input type="reward" name="reward" id="bountyReward" placeholder="Enter Bounty Reward in ETH" bsSize="lg" />
+                <Input type="textarea" name="text" id="issue" placeholder="Describe the Issue" bsSize="lg" />
               </Col>
             </FormGroup>
-            <p className="m-md-5"><Button size="lg" onClick={() => this.createBounty()} disabled={this.state.isStopped}>Submit</Button></p>
+            <FormGroup row>
+              <Col sm={1}>
+                <Label for="issueReward" sm={1} size="lg">Reward</Label>
+              </Col>
+              <Col sm={8}>
+                <Input type="reward" name="reward" id="issueReward" placeholder="Enter Reward in ETH" bsSize="lg" />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col sm={1}>
+                <Label for="issue" sm={1} size="lg">Assignee</Label>
+              </Col>
+              <Col sm={8}>
+                <Input type="address" name="address" id="assigneeAddress" placeholder="Assignee Address" bsSize="lg" />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col sm={1}>
+                <Label for="issue" sm={1} size="lg">Repository Account</Label>
+              </Col>
+              <Col sm={8}>
+                <Input type="owner" name="owner" id="repoOwner" placeholder="Repository Account" bsSize="lg" />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col sm={1}>
+                <Label for="issue" sm={1} size="lg">Repository Name</Label>
+              </Col>
+              <Col sm={8}>
+                <Input type="repoName" name="repoName" id="repositoryName" placeholder="Repository Name" bsSize="lg" />
+              </Col>
+            </FormGroup>
+            <p className="m-md-5"><Button size="lg" onClick={() => this.createIssue()}>Submit</Button></p>
             <p className="p" id="message"></p>
           </Form>
         </div>
